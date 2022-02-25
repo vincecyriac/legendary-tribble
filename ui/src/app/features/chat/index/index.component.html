@@ -1,0 +1,53 @@
+<!-- <router-outlet></router-outlet> -->
+<div class="vh-100">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-sm-12">
+                <div class="row vh-100">
+                    <div>
+                        <div class="col-12" class="chatHeader">
+                            <div class="ChatHeadContent">
+                                <div>Tribble group chat</div>
+                                <div class="menu"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="col-12" class="chatThread">
+                            <ng-scrollbar >
+                                <div class="ChatThreadContent">
+                                    <div class="col-12 message-row" *ngFor="let message of arrMessages; last as last">
+                                        <div *ngIf="!message.self">
+                                            <div class="name">{{message.name}}</div>
+                                        </div>
+                                        <div [ngClass]="{'other' : !message.self, 'self' :  message.self}">
+                                            <div class="chat">
+                                                {{message.message}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="chatClearFix">&nbsp;</div>
+                            </ng-scrollbar>
+                            
+                        </div>
+                    </div>
+                    <div>
+                        <div class="col-12" class="chatInput">
+                            <div class="chatInputContent">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <input type="text" #text class="form-control">
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="button" class="btn btn-primary w-100" (click)="sendMessage(text.value)">send</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

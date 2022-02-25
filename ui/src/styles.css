@@ -1,0 +1,102 @@
+/* width */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.chatHeader {
+  height: 70px;
+  padding-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+.chatHeader .ChatHeadContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 50px;
+  width: 100%;
+  background-color: #f5f5f5;
+  border: 1px solid #e5e5e5;
+  padding: 0px 10px;
+}
+.chatThread {
+  height: calc(100vh - 170px);
+  overflow-y: hidden;
+  padding: 15px 10px 10px 10px;
+  border-left: 2px solid #f1f1f1;
+  border-right: 2px solid #f1f1f1;
+}
+
+.chatInput {
+  height: 100px;
+  padding-bottom: 30px;
+}
+.chatInput .chatInputContent {
+  height: 70px;
+  width: 100%;
+  background-color: #f5f5f5;
+  border: 1px solid #e5e5e5;
+  padding: 16px 10px 0 10px;
+  align-items: center;
+}
+
+.message-row {
+  margin-bottom: 10px;
+
+}
+.chatClearFix{
+  height: 50px;
+}
+.message-row .self {
+  padding-left: 20px;
+  display: flex;
+  justify-content: end;
+}
+.message-row .other {
+  padding-right: 20px;
+  display: flex;
+  justify-content: start;
+}
+.message-row .name{
+  font-weight: 500;
+  font-size: 14px;
+}
+.chat{
+  padding: 10px;
+  max-width: 100%;
+  width: auto;
+  border-top-right-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+.message-row .self .chat {
+  background-color: #F5F7FB;  
+  border-top-left-radius: 8px;
+}
+.message-row .other .chat {
+  background-color: #7269ef;  
+  border-bottom-right-radius: 8px;
+  color: white;
+}
+.scrollbar-control{
+  display: none !important;
+  height: 50px;
+  overflow-y: auto;
+}
+.ng-scrollbar-track{
+  background-color: #5e5e5e;
+}
