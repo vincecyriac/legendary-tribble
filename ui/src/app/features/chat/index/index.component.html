@@ -8,39 +8,50 @@
                         <div class="col-12" class="chatHeader">
                             <div class="ChatHeadContent">
                                 <div>Tribble group chat</div>
-                                <div class="menu"></div>
+                                <div class="me-2"><button class="btn box-shadow-none" (click)="openModal(menu)"><i
+                                            class="fa fa-ellipsis-v" aria-hidden="true"></i></button></div>
                             </div>
                         </div>
                     </div>
                     <div>
                         <div class="col-12" class="chatThread">
-                            <ng-scrollbar >
+                            <perfect-scrollbar (psYReachStart)="scrolledToTop()">
                                 <div class="ChatThreadContent">
-                                    <div class="col-12 message-row" *ngFor="let message of arrMessages; last as last">
-                                        <div *ngIf="!message.self">
+                                    <div class="col-12 message-row"
+                                        *ngFor="let message of arrMessages; last as last; first as first"
+                                        [ngClass]="{ 'mt-3' : first }">
+                                        <div *ngIf="message.userId != intCurrentUserId">
                                             <div class="name">{{message.name}}</div>
                                         </div>
-                                        <div [ngClass]="{'other' : !message.self, 'self' :  message.self}">
+                                        <div
+                                            [ngClass]="{'other' : message.userId != intCurrentUserId, 'self' :  message.userId == intCurrentUserId}">
                                             <div class="chat">
-                                                {{message.message}}
+                                                <div class="chatMessage"> {{message.message}}</div>
+                                                <div class="chatTime"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                                                    {{message.time | chatDate }} </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="chatClearFix">&nbsp;</div>
-                            </ng-scrollbar>
-                            
+                            </perfect-scrollbar>
+
                         </div>
                     </div>
                     <div>
                         <div class="col-12" class="chatInput">
                             <div class="chatInputContent">
                                 <div class="row">
-                                    <div class="col-9">
-                                        <input type="text" #text class="form-control">
-                                    </div>
-                                    <div class="col-3">
-                                        <button type="button" class="btn btn-primary w-100" (click)="sendMessage(text.value)">send</button>
+                                    <div class="col-12">
+                                        <form [formGroup]="messageForm" #myform="ngForm"
+                                            (ngSubmit)="sendMessage(myform)">
+                                            <div class="d-flex">
+                                                <input type="text" class="message-input" placeholder="Type a message"
+                                                    formControlName="message" />
+                                                <button type="submit" class="message-send-btn"
+                                                    [disabled]="messageForm.invalid"><i class="fa fa-paper-plane"
+                                                        aria-hidden="true"></i></button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -51,3 +62,30 @@
         </div>
     </div>
 </div>
+
+<ng-template #menu let-modal>
+        <div class="menu-body">
+            <div class="memberHead">
+                Members
+            </div>
+            <div class="member-list">
+                <div class="member d-flex" *ngFor= "let member of arrActiveUsers">
+                    <div class="member-name">
+                        <div class="member-name-text">
+                            {{member.name}}
+                        </div>
+                    </div>
+                    <div class="member-status">
+                        <div class="member-status-text" [ngClass]="{'online' : member.active}">
+                            {{member.active ? 'Online' : 'Offline'}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="logout d-flex justify-content-end">
+                <div class="btn logout-btn" (click)="logOut()">
+                    Logout
+                </div>
+            </div>
+        </div>
+</ng-template>

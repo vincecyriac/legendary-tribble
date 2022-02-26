@@ -1,6 +1,6 @@
 const { genSaltSync, hashSync,compareSync } = require("bcrypt");
 const { sign } = require("jsonwebtoken");
-const { createUser, getAllUsers, getAdminByUsername } = require("../models/user.model");
+const { createUser, getAllUsers, getAdminByUsername,getUserById } = require("../models/user.model");
 
 
 module.exports = {
@@ -13,6 +13,16 @@ module.exports = {
         res.status(403).json(err);
       } else {
         res.status(200).json();
+      }
+    });
+  },
+
+  getCurrentUser: (req, res) => {
+    getUserById(req.loggedUserID, (data, err) => {
+      if (err) {
+        res.status(403).json(err);
+      } else {
+        res.status(200).json(data);
       }
     });
   },
@@ -68,7 +78,7 @@ module.exports = {
                 userName: data[0].userName,
               },
               process.env.JWT_KEY,
-              { expiresIn: "24h" }
+              { expiresIn: "30d" }
             );
   
             const refreshtoken = sign(
@@ -77,7 +87,7 @@ module.exports = {
                 userName: data[0].userName,
               },
               process.env.JWT_KEY,
-              { expiresIn: "2d" }
+              { expiresIn: "100d" }
             );
   
             res.status(200).json({

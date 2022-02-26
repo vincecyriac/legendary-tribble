@@ -11,14 +11,19 @@ export class SocketService implements OnDestroy {
   socket: any;
   token: any = localStorage.getItem('JWT_TOKEN');
 
-  constructor(
-    private authService: AuthService
-  ) {
-    this.socket = io.connect('http://localhost:3000');
-  }
+  constructor(private authService: AuthService) { }
 
   ngOnDestroy(): void {
     this.socket.disconnect();
+  }
+
+  //connect to the socket
+  connect() {
+    this.socket = io.connect('http://localhost:3000', {
+      extraHeaders: {
+        Authorization: this.token
+      }
+    });
   }
 
   //listen to events
@@ -32,14 +37,17 @@ export class SocketService implements OnDestroy {
 
   //emit event
   emit(eventname: string, data: any) {
+    console.log(data);
+
     this.socket.emit(eventname, {
       data: data,
+      time: new Date(),
       token: this.authService.getAccessToken()
     });
   }
 
   //stop listening to the event
   stopListening(eventname: string) {
-    this.socket.removeListener(eventname);
+    this.socket.disconnect();
   }
 }

@@ -4,21 +4,35 @@ import { CommonModule } from '@angular/common';
 import { ChatRoutingModule } from './chat-routing.module';
 import { IndexComponent } from './index/index.component';
 import { ChatThreadComponent } from './chat-thread/chat-thread.component';
-import { NgScrollbarModule, } from 'ngx-scrollbar';
+import { PipesModule } from 'src/app/common/pipes/pipes.module';
+import { PerfectScrollbarModule,PERFECT_SCROLLBAR_CONFIG,PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true,
+};
 
 
 @NgModule({
   declarations: [
     IndexComponent,
-    ChatThreadComponent
+    ChatThreadComponent,
   ],
   imports: [
     CommonModule,
     ChatRoutingModule,
-    NgScrollbarModule.withConfig({
-      visibility : 'hover',
-      appearance : 'compact',
-   })
+    PipesModule,
+    FormsModule,
+    NgbModule,
+    ReactiveFormsModule,
+    PerfectScrollbarModule
   ],
+  providers: [
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    }
+  ]
 })
 export class ChatModule { }

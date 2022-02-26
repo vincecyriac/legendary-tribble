@@ -39,10 +39,10 @@ module.exports = {
   //get all users
   getAllUsers: (pagination, callback) => {
     const page = parseInt(pagination.page) || 1;
-    const limit = parseInt(pagination.limit) || 100;
+    const limit = parseInt(pagination.limit) || 1000000;
     const offset = (page - 1) * limit;
     pool.query(
-      "SELECT id,email,createdAt,updatedAt FROM `users` LIMIT ?,?",
+      "SELECT id,email,name,createdAt,updatedAt FROM `users` LIMIT ?,?",
       [offset, limit],
       (error, results, fields) => {
         returnData = {
@@ -61,13 +61,13 @@ module.exports = {
   //get user by id
   getUserById: (id, callBack) => {
     pool.query(
-      "SELECT id,name FROM users WHERE id= ?",
+      "SELECT id,name,email, createdAt, UpdatedAt FROM users WHERE id= ?",
       [id],
       (error, results, fields) => {
         if (error) {
           return callBack(error);
         }
-        return callBack(results);
+        return callBack(results[0]);
       }
     );
   },

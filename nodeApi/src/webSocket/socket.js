@@ -1,39 +1,79 @@
 const { verify } = require("jsonwebtoken");
-const { getUserById } = require("../models/user.model");
+const { getUserById,getAllUsers } = require("../models/user.model");
 module.exports = {
     uiSocket: (io) => {
+        
+        var activeArray = [];
+        getAllUsers('', (users, err) => {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                //push name, email, id and active status to activeArray array using for loop
+                for (var i = 0; i < users.results.length; i++) {
+                    activeArray.push({
+                        name: users.results[i].name,
+                        email: users.results[i].email,
+                        id: users.results[i].id,
+                        active: false
+                    });
+                }
+            }
+        })
         // Listen for new connection
         io.on('connection', (socket) => {
             console.log(`New connection ${socket.id}`)
-            // const userId = verify(socket.handshake.headers.authorization, process.env.JWT_KEY).id;
+            const userId = verify(socket.handshake.headers.authorization, process.env.JWT_KEY).id;
+            //find user with id User id from array and set active status to true
+            for (var i = 0; i < activeArray.length; i++) {
+                if (activeArray[i].id == userId) {
+                    activeArray[i].active = true;
+                    io.emit('activeUsers', activeArray);
+                    break;
+                }
+            }
             //join room
             socket.on('newMessage', (data) => {
                 const userId = verify(data.token, process.env.JWT_KEY, (err, user) => {
                     if (user) {
                         getUserById(user.id, (user, err) => {
                             if (err) {
-                                console.log(err)
+                                socket.emit('updateMessage', {
+                                    error: true,
+                                    message: err.message,
+                                })
                             }
                             else {
                                 //send message to all users except sender
-                                socket.broadcast.emit('updateMessage', {
-                                    self: false,
+                                io.emit('updateMessage', {
+                                    error: false,
+                                    userId: user.id,
                                     message: data.data,
-                                    name: user[0].name
-                                })
-                                //send to sender itself
-                                socket.emit('updateMessage', {
-                                    self: true,
-                                    message: data.data,
-                                    name: user[0].name
+                                    time: data.time,
+                                    name: user.name
                                 })
                             }
                         })
                     }
-                    else{
-                        console.log(err)
+                    else {
+                        socket.emit('updateMessage', {
+                            error: true,
+                            message: err.message,
+                        })
                     }
                 });
+            });
+            //listen for disconnect
+            socket.on('disconnect', () => {
+                console.log(`Disconnected ${socket.id}`)
+                //find user with id User id from array and set active status to false
+                for (var i = 0; i < activeArray.length; i++) {
+                    if (activeArray[i].id == userId) {
+                        activeArray[i].active = false;
+                        io.emit('activeUsers', activeArray);
+                        break;
+                    }
+                }
             });
         });
     },

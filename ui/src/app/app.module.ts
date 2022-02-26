@@ -4,15 +4,25 @@ import { BrowserModule } from '@angular/platform-browser';
 import { authInterceptorProviders } from './common/interceptor/auth.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+      progressBar:true,
+      timeOut: 3000,
+      tapToDismiss: true
+    }),
   ],
   providers: [
     authInterceptorProviders
