@@ -28,7 +28,7 @@ export class AuthService {
 
   //Login service
   public login(param: any): Observable<any> {
-    return this.http.post(this.API_ENDPOINT + 'login', param).pipe(map((user: any) => {
+    return this.http.post(this.API_ENDPOINT + 'user/login', param).pipe(map((user: any) => {
       let data: any = user;
       if (data) {
         localStorage.setItem(this.JWT_TOKEN, data.accessToken);
