@@ -19,10 +19,10 @@ export class IndexComponent implements OnInit,OnDestroy {
   @ViewChild(PerfectScrollbarComponent, { static: false }) componentRef?: PerfectScrollbarComponent;
 
   arrMessages: any = [
-    { error: false, userId: 1, message: 'ASA', time: '2022-02-26T09:09:37.150Z', name: 'John' },
+   /*  { error: false, userId: 1, message: 'ASA', time: '2022-02-26T09:09:37.150Z', name: 'John' },
     { error: false, userId: 2, message: 'ASA', time: '2022-02-26T09:09:37.150Z', name: 'John' },
     { error: false, userId: 1, message: 'ASA', time: '2022-02-26T09:09:37.150Z', name: 'John' },
-    { error: false, userId: 2, message: 'ASA', time: '2022-02-26T09:09:37.150Z', name: 'John' },
+    { error: false, userId: 2, message: 'ASA', time: '2022-02-26T09:09:37.150Z', name: 'John' }, */
   ];
   arrActiveUsers: any = [];
   intCurrentUserId !: number;
@@ -75,8 +75,14 @@ export class IndexComponent implements OnInit,OnDestroy {
   }
 
   sendMessage(form: any) {
-    this.socket.emit('newMessage', form.value.message);
-    this.messageForm.reset();
+    // this.socket.emit('newMessage', form.value.message);
+    this.user.sendMessage(form.value.message).pipe(takeUntil(this.objDestroyed$)).subscribe((data) => {
+      this.messageForm.reset();
+    },
+      (error) => {
+        this.common.showError("Something went wrong");
+      }
+    )
   }
 
   scrollToBottom() {

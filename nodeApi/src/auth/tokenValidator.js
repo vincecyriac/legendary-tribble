@@ -25,6 +25,7 @@ module.exports = {
                     }
                     else {
                         req.loggedUserID = user.id;
+                        req.loggedUser = user;
                         next();
                     }
                 });

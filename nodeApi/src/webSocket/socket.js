@@ -25,54 +25,25 @@ module.exports = {
             console.log(`New connection ${socket.id}`)
             const userId = verify(socket.handshake.headers.authorization, process.env.JWT_KEY).id;
             //find user with id User id from array and set active status to true
-            /* for (var i = 0; i < activeArray.length; i++) {
+            for (var i = 0; i < activeArray.length; i++) {
                 if (activeArray[i].id == userId) {
                     activeArray[i].active = true;
                     io.emit('activeUsers', activeArray);
                     break;
                 }
-            } */
-            socket.on('newMessage', (data) => {
-                const userId = verify(data.token, process.env.JWT_KEY, (err, user) => {
-                    if (user) {
-                        findUser(user.id, (user, err) => {
-                            if (err) {
-                                socket.emit('updateMessage', {
-                                    error: true,
-                                    message: err.message,
-                                })
-                            }
-                            else {
-                                //send message to all users except sender
-                                io.emit('updateMessage', {
-                                    error: false,
-                                    userId: user.id,
-                                    message: data.data,
-                                    time: data.time,
-                                    name: user.name
-                                })
-                            }
-                        })
-                    }
-                    else {
-                        socket.emit('updateMessage', {
-                            error: true,
-                            message: err.message,
-                        })
-                    }
-                });
-            });
+            }
+            
             //listen for disconnect
             socket.on('disconnect', () => {
                 console.log(`Disconnected ${socket.id}`)
                 //find user with id User id from array and set active status to false
-                /* for (var i = 0; i < activeArray.length; i++) {
+                for (var i = 0; i < activeArray.length; i++) {
                     if (activeArray[i].id == userId) {
                         activeArray[i].active = false;
                         io.emit('activeUsers', activeArray);
                         break;
                     }
-                } */
+                }
             });
         });
     },

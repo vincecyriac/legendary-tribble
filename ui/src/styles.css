@@ -105,7 +105,7 @@ body {
   color: hsla(0,0%,100%,.5);
 }
 .ps__rail-y {
-  display: none !important;
+  /* display: none !important; */
 }
 .message-input {
   width: calc(100% - 61px);

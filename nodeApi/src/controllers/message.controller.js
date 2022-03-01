@@ -3,7 +3,6 @@ const messageSchema = require("../models/message.model");
 
 module.exports = {
     newMessage: (req, res) => {
-        console.log(req.loggedUserID);
         const message = new messageSchema({
             message: req.body.message,
             user: req.loggedUserID,
@@ -13,6 +12,13 @@ module.exports = {
             if (err) {
                 res.status(500).send(err);
             } else {
+                io.emit('updateMessage', {
+                    error: false,
+                    userId: req.loggedUserID,
+                    message: req.body.message,
+                    time: new Date(),
+                    name: req.loggedUser.name
+                })
                 res.status(200).send();
             }
         });
