@@ -28,7 +28,7 @@ export class AuthService {
 
   //Login service
   public login(param: any): Observable<any> {
-    return this.http.post(this.API_ENDPOINT + 'user/login', param).pipe(map((user: any) => {
+    return this.http.post(this.API_ENDPOINT + 'auth/login', param).pipe(map((user: any) => {
       let data: any = user;
       if (data) {
         localStorage.setItem(this.JWT_TOKEN, data.accessToken);
@@ -52,7 +52,7 @@ export class AuthService {
 
   //refresh currect access token (from auth interceptor)
   refreshLogin() {
-    return this.http.post(this.API_ENDPOINT + 'admin/refreshToken', { refreshToken : localStorage.getItem(this.RF_TOKEN)} )
+    return this.http.post(this.API_ENDPOINT + 'auth/refreshToken', { refreshToken : localStorage.getItem(this.RF_TOKEN)} )
   }
 
   //save new access token (from auth interceptor)

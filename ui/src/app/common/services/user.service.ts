@@ -13,7 +13,7 @@ export class UserService {
 
   //fetch current user
   getCurrentUser() {
-    return this.http.get(this.API_ENDPOINT + 'me');
+    return this.http.get(this.API_ENDPOINT + 'user/me');
   }
 
 }

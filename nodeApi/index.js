@@ -2,7 +2,18 @@ const express = require('express');
 const mongoose = require('mongoose');
 require("dotenv").config();
 const app = express();
+const port = process.env.PORT || 3001;
 
+
+//connect to mongoDB database
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }, (err, db) => {
+  if(err){
+      console.log(err);
+  }
+  else{
+      console.log("Connected to mongoDB");
+  }
+});
 
 //import cors to allow cross origin resource sharing
 const cors = require("cors");
@@ -32,19 +43,19 @@ const userRouter = require("./src/routes/user.router");
 app.use("/api/user/", userRouter);
 const messageRouter = require("./src/routes/message.router");
 app.use("/api/message/", messageRouter);
+const authRouter = require("./src/routes/auth.router");
+app.use("/api/auth/", authRouter);
 
 
-//connect to mongoDB database
-mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }, (err, db) => {
-    if(err){
-        console.log(err);
-    }
-    else{
-        console.log("Connected to mongoDB");
-    }
-});
+//listen for requests
+const server =app.listen(port, () => console.log(`Listening on port ${port}`));
 
-
-app.listen(process.env.PORT, () => {
-    console.log('Example app listening on port  ' + process.env.PORT);
-});
+//socket connection
+var socket = require('socket.io')
+var { uiSocket } = require('./src/webSocket/socket');
+var io = socket(server, {cors: {origin: "*"}});
+uiSocket(io);
+global.io = io
+module.exports = {
+  socket
+}

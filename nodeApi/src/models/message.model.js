@@ -2,15 +2,15 @@
 const mongoose = require("mongoose");
 const messageSchema = new mongoose.Schema({
     message: {
-        type: String,
+        type: mongoose.Schema.Types.String,
         required: true,
     },
     user: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
     time: {
-        type: Date,
+        type: mongoose.Schema.Types.Date,
         default: Date.now,
         required: true
     }

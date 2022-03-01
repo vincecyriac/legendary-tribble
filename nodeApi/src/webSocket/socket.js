@@ -1,10 +1,10 @@
 const { verify } = require("jsonwebtoken");
-const { getUserById,getAllUsers } = require("../models/user.model");
+const { findUser } = require("../controllers/user.controller");
 module.exports = {
     uiSocket: (io) => {
         
         var activeArray = [];
-        getAllUsers('', (users, err) => {
+        /* getAllUsers('', (users, err) => {
             if (err) {
                 console.log(err);
             }
@@ -19,24 +19,23 @@ module.exports = {
                     });
                 }
             }
-        })
+        }) */
         // Listen for new connection
         io.on('connection', (socket) => {
             console.log(`New connection ${socket.id}`)
             const userId = verify(socket.handshake.headers.authorization, process.env.JWT_KEY).id;
             //find user with id User id from array and set active status to true
-            for (var i = 0; i < activeArray.length; i++) {
+            /* for (var i = 0; i < activeArray.length; i++) {
                 if (activeArray[i].id == userId) {
                     activeArray[i].active = true;
                     io.emit('activeUsers', activeArray);
                     break;
                 }
-            }
-            //join room
+            } */
             socket.on('newMessage', (data) => {
                 const userId = verify(data.token, process.env.JWT_KEY, (err, user) => {
                     if (user) {
-                        getUserById(user.id, (user, err) => {
+                        findUser(user.id, (user, err) => {
                             if (err) {
                                 socket.emit('updateMessage', {
                                     error: true,
@@ -67,13 +66,13 @@ module.exports = {
             socket.on('disconnect', () => {
                 console.log(`Disconnected ${socket.id}`)
                 //find user with id User id from array and set active status to false
-                for (var i = 0; i < activeArray.length; i++) {
+                /* for (var i = 0; i < activeArray.length; i++) {
                     if (activeArray[i].id == userId) {
                         activeArray[i].active = false;
                         io.emit('activeUsers', activeArray);
                         break;
                     }
-                }
+                } */
             });
         });
     },
