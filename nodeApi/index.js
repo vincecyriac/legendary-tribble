@@ -19,7 +19,7 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }, (err, db) => {
 const cors = require("cors");
 app.use(cors({
     origin: '*',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+    optionsSuccessStatus: 200 
   }));
 
 //use the body-parser middleware to parse the request body
