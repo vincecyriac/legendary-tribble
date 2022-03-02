@@ -13,11 +13,14 @@ module.exports = {
                 res.status(500).send(err);
             } else {
                 io.emit('updateMessage', {
-                    error: false,
-                    userId: req.loggedUserID,
+                    id: message.id,
                     message: req.body.message,
                     time: new Date(),
-                    name: req.loggedUser.name
+                    sender: {
+                        _id: req.loggedUserID,
+                        name: req.loggedUser.name,
+                        email: req.loggedUser.email
+                    }
                 })
                 res.status(200).send();
             }
@@ -27,7 +30,6 @@ module.exports = {
     getAllMessages: (req, res) => {
         messageSchema.aggregate([
             {
-                //find all the user with the same id of user in the message
                 $lookup: {
                     from: "users",
                     let: {
@@ -51,7 +53,16 @@ module.exports = {
                         }
                     ],
                 },
-
+            },
+            {
+                $project: {
+                    _id: 1,
+                    message: 1,
+                    time: 1,
+                    sender: {
+                        $arrayElemAt: ["$sender", 0]
+                    }
+                }
             },
             {
                 $sort: {
@@ -68,38 +79,3 @@ module.exports = {
 
     }
 };
-
-
-/* 
-messageSchema.aggregate([
-            {
-                //find all the user with the same id of user in the message
-                $lookup: {
-                    from: "users",
-                    localField: "id",
-                    foreignField: "user",
-                    as: "sender",
-                    pipeline: [
-                        {
-                            $project: {
-                                _id: 1,
-                                name: 1,
-                                email: 1
-                            }
-                        }
-                    ],
-                },
-                              
-            },
-            {
-                $sort: {
-                    time: 1
-                }
-            }
-        ], (err, messages) => {
-            if (err) {
-                res.status(500).send(err);
-            } else {
-                res.send(messages);
-            }
-        });   */

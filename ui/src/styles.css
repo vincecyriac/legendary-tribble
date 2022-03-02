@@ -152,3 +152,12 @@ body {
 .member-status{
   font-size: 12px;
 }
+.spinner{
+  position: absolute;
+  background-color: #fff;
+  z-index: 3;
+}
+.spinner .fa{
+  font-size: 30px;
+  color: #7269ef;
+}

@@ -24,4 +24,8 @@ export class UserService {
     });
   }
 
+  //get all messages
+  getMessages(): Observable<any> {
+    return this.http.get(this.API_ENDPOINT + 'message/');
+  }
 }

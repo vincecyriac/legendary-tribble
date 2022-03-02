@@ -81,7 +81,7 @@ module.exports = {
         });
     },
 
-    getAllUsers: (req, res) => {
+    getAllUsers: (res) => {
         userSchema.find({}, (err, users) => {
             if (err) {
                 res.status(500).send(err);
@@ -89,7 +89,6 @@ module.exports = {
                 res.send(users);
             }
         });
-
     },
 
     createUser: (req, res) => {

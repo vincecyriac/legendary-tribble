@@ -1,4 +1,10 @@
-<!-- <router-outlet></router-outlet> -->
+<div class="spinner w-100 vh-100 d-flex justify-content-center align-items-center" *ngIf="blnSpinner">
+    <div>
+        <div class="col-12 text-center">
+            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+        </div>
+    </div>
+</div>
 <div class="vh-100">
     <div class="container">
         <div class="row justify-content-center">
@@ -18,13 +24,13 @@
                             <perfect-scrollbar (psYReachStart)="scrolledToTop()">
                                 <div class="ChatThreadContent">
                                     <div class="col-12 message-row"
-                                        *ngFor="let message of arrMessages; last as last; first as first"
+                                        *ngFor="let message of arrMessages; let i = index; last as last; first as first;"
                                         [ngClass]="{ 'mt-3' : first }">
-                                        <div *ngIf="message.userId != intCurrentUserId">
-                                            <div class="name">{{message.name}}</div>
+                                        <div *ngIf=" (message.sender._id != intCurrentUserId)">
+                                            <div class="name">{{message.sender.name}}</div>
                                         </div>
                                         <div
-                                            [ngClass]="{'other' : message.userId != intCurrentUserId, 'self' :  message.userId == intCurrentUserId}">
+                                            [ngClass]="{'other' : message.sender._id != intCurrentUserId, 'self' :   message.sender._id == intCurrentUserId}">
                                             <div class="chat">
                                                 <div class="chatMessage"> {{message.message}}</div>
                                                 <div class="chatTime"><i class="fa fa-clock-o" aria-hidden="true"></i>
@@ -34,7 +40,6 @@
                                     </div>
                                 </div>
                             </perfect-scrollbar>
-
                         </div>
                     </div>
                     <div>
