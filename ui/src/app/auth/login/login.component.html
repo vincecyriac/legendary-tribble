@@ -1,12 +1,12 @@
 <div class="vh-100 d-flex justify-content-center align-items-center">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-4 card p-4 m-2">
-                <form [formGroup]="loginForm" #myform="ngForm" (ngSubmit)="login(myform)">
+            <div class="col-md-4 p-4 m-2">
+                <form [formGroup]="loginForm" #myform="ngForm" (ngSubmit)="login(myform)" autocomplete="off">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">email</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" formControlName="email" required>
-                        <div class="text-danger" *ngIf="loginForm.controls['email'].invalid && (loginForm.controls['email'].dirty ||loginForm.controls['email'].touched || blnSubmitted)">
+                        <input type="text" class="form-control log-inp" id="exampleInputEmail1" formControlName="email" required>
+                        <div class="text-danger mt-1" *ngIf="loginForm.controls['email'].invalid && (loginForm.controls['email'].dirty ||loginForm.controls['email'].touched || blnSubmitted)">
                             <div *ngIf="loginForm.controls['email'].errors?.required">
                                 Required
                             </div>
@@ -14,7 +14,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" formControlName="password" required>
+                        <input type="password" class="form-control log-inp" id="exampleInputPassword1" formControlName="password" required>
                         <div class="text-danger" *ngIf="loginForm.controls['password'].invalid && (loginForm.controls['password'].dirty ||loginForm.controls['password'].touched || blnSubmitted)">
                             <div *ngIf="loginForm.controls['password'].errors?.required">
                                 Required
@@ -24,8 +24,8 @@
                             Invalid credentials
                         </div>
                     </div>
-                    <div>
-                        <button type="submit" class="w-100 btn btn-primary">Login</button>
+                    <div class="mt-1">
+                        <button type="submit" class="w-100 btn login-btn">Login</button>
                     </div>
                 </form>
             </div>
