@@ -67,8 +67,8 @@ module.exports = {
             {
                 $sort: {
                     time: 1
-                }
-            }
+                },
+            },
         ], (err, messages) => {
             if (err) {
                 res.status(500).send(err);

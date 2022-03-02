@@ -9,6 +9,8 @@ import { SocketService } from 'src/app/common/services/socket.service';
 import { UserService } from 'src/app/common/services/user.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
+
+
 @Component({
   selector: 'app-index',
   templateUrl: './index.component.html',
@@ -23,6 +25,7 @@ export class IndexComponent implements OnInit, OnDestroy {
   intCurrentUserId !: number;
   blnSpinner: boolean = true;
   private objDestroyed$ = new Subject();
+  audio : any;
 
   messageForm: FormGroup = new FormGroup({
     message: new FormControl('', [Validators.required]),
@@ -36,6 +39,11 @@ export class IndexComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getUserDetails();
+
+    this.audio = new Audio();
+    this.audio.src = '../../../../assets/Notification.mp3';
+    this.audio.load();
+
   }
   ngOnDestroy() {
     this.objDestroyed$.next()
@@ -62,7 +70,10 @@ export class IndexComponent implements OnInit, OnDestroy {
   subscribeToUpdates() {
     this.socket.listen('updateMessage').pipe(takeUntil(this.objDestroyed$)).subscribe((data) => {
       this.arrMessages.push(data);
-      console.log(data);
+      if(this.intCurrentUserId !== data.sender._id){
+        this.audio.play();
+      }
+      // this.audio.play();
       this.scrollToBottom()
     })
   }
