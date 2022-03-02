@@ -1,10 +1,19 @@
-//use dotenv to load environment variables
+const express = require('express');
+const mongoose = require('mongoose');
 require("dotenv").config();
-
-//create a new express server
-const express = require("express");
 const app = express();
 const port = process.env.PORT || 3001;
+
+
+//connect to mongoDB database
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true }, (err, db) => {
+  if(err){
+      console.log(err);
+  }
+  else{
+      console.log("Connected to mongoDB");
+  }
+});
 
 //import cors to allow cross origin resource sharing
 const cors = require("cors");
@@ -31,7 +40,11 @@ app.use((req, res, next) => {
 
 //configure routes
 const userRouter = require("./src/routes/user.router");
-app.use("/api/", userRouter);
+app.use("/api/user/", userRouter);
+const messageRouter = require("./src/routes/message.router");
+app.use("/api/message/", messageRouter);
+const authRouter = require("./src/routes/auth.router");
+app.use("/api/auth/", authRouter);
 
 
 //listen for requests

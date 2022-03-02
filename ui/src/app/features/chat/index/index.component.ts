@@ -14,25 +14,21 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.css']
 })
-export class IndexComponent implements OnInit,OnDestroy {
+export class IndexComponent implements OnInit, OnDestroy {
 
   @ViewChild(PerfectScrollbarComponent, { static: false }) componentRef?: PerfectScrollbarComponent;
 
-  arrMessages: any = [
-    { error: false, userId: 1, message: 'ASA', time: '2022-02-26T09:09:37.150Z', name: 'John' },
-    { error: false, userId: 2, message: 'ASA', time: '2022-02-26T09:09:37.150Z', name: 'John' },
-    { error: false, userId: 1, message: 'ASA', time: '2022-02-26T09:09:37.150Z', name: 'John' },
-    { error: false, userId: 2, message: 'ASA', time: '2022-02-26T09:09:37.150Z', name: 'John' },
-  ];
+  arrMessages: any = [];
   arrActiveUsers: any = [];
   intCurrentUserId !: number;
+  blnSpinner: boolean = true;
   private objDestroyed$ = new Subject();
 
   messageForm: FormGroup = new FormGroup({
     message: new FormControl('', [Validators.required]),
   });
 
-  constructor(private socket: SocketService, private common: CommonService, private auth: AuthService, private user: UserService,private modal: NgbModal) {
+  constructor(private socket: SocketService, private common: CommonService, private auth: AuthService, private user: UserService, private modal: NgbModal) {
     this.socket.connect()
     this.subscribeToUpdates();
     this.listenToActiveUsers();
@@ -48,22 +44,26 @@ export class IndexComponent implements OnInit,OnDestroy {
     this.socket.stopListening('activeUsers');
   }
 
+  getAllMessages() {
+    this.user.getMessages().pipe(takeUntil(this.objDestroyed$)).subscribe((res: any) => {
+      this.arrMessages = res;
+      this.scrollToBottom();
+    })
+  }
+
   getUserDetails() {
     this.user.getCurrentUser().pipe(takeUntil(this.objDestroyed$)).subscribe((data: any) => {
       this.intCurrentUserId = data.id;
+      this.getAllMessages();
     })
   }
 
   //subscribe to new updates
   subscribeToUpdates() {
     this.socket.listen('updateMessage').pipe(takeUntil(this.objDestroyed$)).subscribe((data) => {
-      if (data.error) {
-        this.common.showError("Please login again");
-        this.auth.logOut();
-      } else {
-        this.arrMessages.push(data);
-        this.scrollToBottom()
-      }
+      this.arrMessages.push(data);
+      console.log(data);
+      this.scrollToBottom()
     })
   }
 
@@ -75,26 +75,35 @@ export class IndexComponent implements OnInit,OnDestroy {
   }
 
   sendMessage(form: any) {
-    this.socket.emit('newMessage', form.value.message);
-    this.messageForm.reset();
+    // this.socket.emit('newMessage', form.value.message);
+    this.user.sendMessage(form.value.message).pipe(takeUntil(this.objDestroyed$)).subscribe((data) => {
+      this.messageForm.reset();
+    },
+      (error) => {
+        this.common.showError("Something went wrong");
+      }
+    )
   }
 
   scrollToBottom() {
     setTimeout(() => {
-      this.componentRef?.directiveRef?.scrollToBottom(0, 500);  
+      this.componentRef?.directiveRef?.scrollToBottom(0, 500);
     }, 1);
+    setTimeout(() => {
+      this.blnSpinner = false;
+    }, 1000);
   }
 
   scrolledToTop() {
-    console.log('scrolled to top');    
+    console.log('scrolled to top');
   }
 
   logOut() {
     this.modal.dismissAll();
     this.auth.logOut();
   }
-  openModal(modal:any){
-    this.modal.open(modal, { size: 'sm',});    
+  openModal(modal: any) {
+    this.modal.open(modal, { size: 'sm', });
   }
 
 }

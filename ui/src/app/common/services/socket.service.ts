@@ -19,7 +19,7 @@ export class SocketService implements OnDestroy {
 
   //connect to the socket
   connect() {
-    this.socket = io.connect('http://localhost:3000', {
+    this.socket = io.connect('http://localhost:3001', {
       extraHeaders: {
         Authorization: this.token
       }

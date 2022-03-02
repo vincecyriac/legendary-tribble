@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -12,8 +13,19 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   //fetch current user
-  getCurrentUser() {
-    return this.http.get(this.API_ENDPOINT + 'me');
+  getCurrentUser(): Observable<any> {
+    return this.http.get(this.API_ENDPOINT + 'user/me');
   }
 
+  //send message 
+  sendMessage(message : any): Observable<any> {
+    return this.http.post(this.API_ENDPOINT + 'message/', {
+      message: message
+    });
+  }
+
+  //get all messages
+  getMessages(): Observable<any> {
+    return this.http.get(this.API_ENDPOINT + 'message/');
+  }
 }

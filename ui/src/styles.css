@@ -1,5 +1,5 @@
 body {
-  background-color: #f5f7fb !important;
+  background-color: #eff7fe !important;
   font-family: Public Sans,sans-serif !important;
 }
 .box-shadow-none {
@@ -26,6 +26,7 @@ body {
   font-family: "Poppins";
   z-index: 2;
   border: 1px solid #f0eff5!important;
+  border-radius:15px 15px 0 0 !important;
 }
 .chatThread {
   height: calc(100vh - 170px);
@@ -48,6 +49,7 @@ body {
   border: 1px solid #f0eff5!important;
   padding: 16px 10px 0 10px;
   align-items: center;
+  border-radius: 0 0 15px 15px !important;
 }
 
 .message-row {
@@ -105,7 +107,8 @@ body {
   color: hsla(0,0%,100%,.5);
 }
 .ps__rail-y {
-  display: none !important;
+  /* display: none !important; */
+  opacity: .1 !important;
 }
 .message-input {
   width: calc(100% - 61px);
@@ -151,4 +154,13 @@ body {
 }
 .member-status{
   font-size: 12px;
+}
+.spinner{
+  position: absolute;
+  background-color: #eff7fe;
+  z-index: 3;
+}
+.spinner .fa{
+  font-size: 30px;
+  color: #7269ef;
 }
