@@ -4,6 +4,7 @@ const messageSchema = require("../models/message.model");
 module.exports = {
     newMessage: (req, res) => {
         const message = new messageSchema({
+            conv_id: req.body.conv_id,
             message: req.body.message,
             user: req.loggedUserID,
             time: new Date()

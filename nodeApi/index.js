@@ -3,6 +3,14 @@ const mongoose = require('mongoose');
 require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 3001;
+const webpush = require('web-push');
+
+// console.log(webpush.generateVAPIDKeys());
+
+const webpushKey = {
+  publicKey: 'BB1aUXJPRAG-q98wD9OrkegsKAHwYBSXzBRDZsg0MwChUG5mp4EIeNwTzz2-aNmZYwZv4n68R-aJL-12XeUb63Q',
+  privateKey: 's5PtyPdEzPdO8zZX8AtHOR6TMcPo39KI7Nfpi3PZdbs'
+}
 
 
 //connect to mongoDB database
@@ -45,6 +53,8 @@ const messageRouter = require("./src/routes/message.router");
 app.use("/api/message/", messageRouter);
 const authRouter = require("./src/routes/auth.router");
 app.use("/api/auth/", authRouter);
+const convRouter = require("./src/routes/conversation.router");
+app.use("/api/conv/", convRouter);
 
 
 //listen for requests
