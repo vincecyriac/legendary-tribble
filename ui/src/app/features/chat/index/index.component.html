@@ -1,36 +1,61 @@
-<div class="spinner w-100 vh-100 d-flex justify-content-center align-items-center" *ngIf="blnSpinner">
-    <div>
-        <div class="col-12 text-center">
-            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
-        </div>
-    </div>
-</div>
 <div class="vh-100">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-6 col-sm-12">
+            <div class="col-md-4 col-sm-12">
                 <div class="row vh-100">
                     <div>
                         <div class="col-12" class="chatHeader">
                             <div class="ChatHeadContent">
                                 <div>Tribble group chat</div>
-                                <div class="me-2"><button class="btn box-shadow-none" (click)="openModal(menu)"><i
-                                            class="fa fa-ellipsis-v" aria-hidden="true"></i></button></div>
+                                <div class="me-2">
+                                    <button class="btn box-shadow-none" (click)="logOut()">
+                                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12" class="chatConv">
+                        <perfect-scrollbar>
+                            <div class="conversations">
+                                <div class="conv-single" *ngFor="let conv of arrConversations">
+                                    <button class="w-100 conv-btn box-shadow-none text-start" (click)="selectConversation(conv)" [ngClass]="{'active' : conv._id==strCurrentConvId}">
+                                        <div class="btn-content">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="conv-left">{{ conv.group == 0 ? getEffectiveUserName(conv?.users) : conv.groupName}}</div>
+                                                <div class="conv-time d-flex align-items-center">
+                                                    {{conv.lastUpdate | chatDate }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                        </perfect-scrollbar>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 col-sm-12">
+                <div class="row vh-100">
+                    <div>
+                        <div class="col-12" class="chatHeader">
+                            <div class="ChatHeadContent">
+                                <div>{{strCurrentConvName}}</div>
                             </div>
                         </div>
                     </div>
                     <div>
                         <div class="col-12" class="chatThread">
-                            <perfect-scrollbar (psYReachStart)="scrolledToTop()">
-                                <div class="ChatThreadContent">
+                            <perfect-scrollbar #threadScroll>
+                                <div class="ChatThreadContent" id="threadHide" [ngClass]="{'opacity-1' : !blnSpinner, 'opacity-0' : blnSpinner}">
                                     <div class="col-12 message-row"
                                         *ngFor="let message of arrMessages; let i = index; last as last; first as first;"
                                         [ngClass]="{ 'mt-3' : first }">
-                                        <div *ngIf=" (message.sender._id != intCurrentUserId)">
-                                            <div class="name">{{message.sender.name}}</div>
+                                        <div *ngIf=" (message.sender[0]?._id != strCurrentUserId)">
+                                            <div class="name">{{message.sender[0].name}}</div>
                                         </div>
                                         <div
-                                            [ngClass]="{'other' : message.sender._id != intCurrentUserId, 'self' :   message.sender._id == intCurrentUserId}">
+                                            [ngClass]="{'other' : message.sender[0]._id != strCurrentUserId, 'self' :   message.sender[0]._id == strCurrentUserId}">
                                             <div class="chat">
                                                 <div class="chatMessage"> {{message.message}}</div>
                                                 <div class="chatTime"><i class="fa fa-clock-o" aria-hidden="true"></i>
@@ -38,6 +63,9 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-12 text-center mt-5" *ngIf="blnSpinner">
+                                    <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
                                 </div>
                             </perfect-scrollbar>
                         </div>
@@ -67,30 +95,3 @@
         </div>
     </div>
 </div>
-
-<ng-template #menu let-modal>
-        <div class="menu-body">
-            <div class="memberHead">
-                Members
-            </div>
-            <div class="member-list">
-                <div class="member d-flex" *ngFor= "let member of arrActiveUsers">
-                    <div class="member-name">
-                        <div class="member-name-text">
-                            {{member.name}}
-                        </div>
-                    </div>
-                    <div class="member-status">
-                        <div class="member-status-text" [ngClass]="{'online' : member.active}">
-                            {{member.active ? 'Online' : 'Offline'}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="logout d-flex justify-content-end">
-                <div class="btn logout-btn" (click)="logOut()">
-                    Logout
-                </div>
-            </div>
-        </div>
-</ng-template>

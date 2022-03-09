@@ -19,14 +19,15 @@ export class UserService {
 
   //send message 
   sendMessage(message : any): Observable<any> {
-    return this.http.post(this.API_ENDPOINT + 'message/', {
-      message: message,
-      conv_id : "62258e87ec6562679206506b"
-    });
+    return this.http.post(this.API_ENDPOINT + 'message/', message);
   }
 
   //get all messages
-  getMessages(): Observable<any> {
-    return this.http.get(this.API_ENDPOINT + 'message/');
+  getMessages(convId : any): Observable<any> {
+    return this.http.get(this.API_ENDPOINT + 'conv/messages/'+convId);
+  }
+
+  getConversations(): Observable<any> {
+    return this.http.get(this.API_ENDPOINT + 'conv/');
   }
 }

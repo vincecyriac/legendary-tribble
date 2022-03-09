@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { ChatRoutingModule } from './chat-routing.module';
 import { IndexComponent } from './index/index.component';
-import { ChatThreadComponent } from './chat-thread/chat-thread.component';
 import { PipesModule } from 'src/app/common/pipes/pipes.module';
 import { PerfectScrollbarModule,PERFECT_SCROLLBAR_CONFIG,PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -18,7 +17,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
   declarations: [
     IndexComponent,
-    ChatThreadComponent,
   ],
   imports: [
     CommonModule,

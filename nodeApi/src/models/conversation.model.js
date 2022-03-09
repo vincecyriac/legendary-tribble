@@ -10,6 +10,16 @@ const convScheme = new mongoose.Schema({
         type: mongoose.Schema.Types.Date,
         default: Date.now,
         required: true
+    },
+    group  : {
+        type: mongoose.Schema.Types.Number,
+        required: true,
+        default: 0
+    },
+    groupName : {
+        type: mongoose.Schema.Types.String,
+        required: true,
+        default: null
     }
 });
 

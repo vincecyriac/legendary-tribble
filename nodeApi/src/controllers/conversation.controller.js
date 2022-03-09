@@ -12,15 +12,17 @@ module.exports = {
         });
     },
     createConv: (req, res) => {
-        if (!req.body.users || req.body.users.length != 2) {
+        if (!req.body.users) {
             res.status(400).send({
-                message: "Please provide 2 users"
+                message: "Please provide atleast 2 users"
             });
         }
         else {
             const conv = new convSchema({
                 users: req.body.users,
-                lastUpdate: new Date()
+                lastUpdate: new Date(),
+                group: req.body.group,
+                groupName: req.body.groupName || null
             });
             conv.save((err, conv) => {
                 if (err) {
@@ -32,7 +34,6 @@ module.exports = {
         }
     },
     getAllConvs: (req, res) => {
-        console.log(req.loggedUserID);
         convSchema.aggregate([
             {
                 $lookup: {
@@ -65,6 +66,11 @@ module.exports = {
                         $in: [mongoose.Types.ObjectId(req.loggedUserID), "$users._id"]
                     }
                 }
+            },
+            {
+                $sort: {
+                    lastUpdate: -1
+                }
             }
         ]).exec((err, convs) => {
             if (err) {
@@ -92,7 +98,7 @@ module.exports = {
                                 pipeline: [
                                     {
                                         $project: {
-                                            _id: 0,
+                                            _id: 1,
                                             name: 1,
                                             email: 1
                                         }
