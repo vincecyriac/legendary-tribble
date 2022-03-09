@@ -37,8 +37,6 @@ export class SocketService implements OnDestroy {
 
   //emit event
   emit(eventname: string, data: any) {
-    console.log(data);
-
     this.socket.emit(eventname, {
       data: data,
       time: new Date(),

@@ -30,7 +30,7 @@ module.exports = {
                                 email: user.email,
                             },
                             process.env.JWT_KEY,
-                            { expiresIn: "30d" }
+                            { expiresIn: "1d" }
                         );
 
                         const refreshtoken = sign(
@@ -39,7 +39,7 @@ module.exports = {
                                 email: user.email,
                             },
                             process.env.JWT_KEY,
-                            { expiresIn: "100d" }
+                            { expiresIn: "7d" }
                         );
 
                         res.status(200).json({
@@ -63,7 +63,7 @@ module.exports = {
                 email: req.loggedUser.email,
             },
             process.env.JWT_KEY,
-            { expiresIn: "30d" }
+            { expiresIn: "1d" }
         );
 
         const refreshtoken = sign(
@@ -72,7 +72,7 @@ module.exports = {
                 email: req.loggedUser.email,
             },
             process.env.JWT_KEY,
-            { expiresIn: "100d" }
+            { expiresIn: "7d" }
         );
 
         res.status(200).json({

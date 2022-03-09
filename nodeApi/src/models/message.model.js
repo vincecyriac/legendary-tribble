@@ -1,6 +1,11 @@
 //create message model
 const mongoose = require("mongoose");
 const messageSchema = new mongoose.Schema({
+    conv_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: "conversations"
+    },
     message: {
         type: mongoose.Schema.Types.String,
         required: true,

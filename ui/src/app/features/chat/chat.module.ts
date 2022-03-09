@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import { ChatRoutingModule } from './chat-routing.module';
 import { IndexComponent } from './index/index.component';
-import { ChatThreadComponent } from './chat-thread/chat-thread.component';
 import { PipesModule } from 'src/app/common/pipes/pipes.module';
 import { PerfectScrollbarModule,PERFECT_SCROLLBAR_CONFIG,PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -17,7 +17,6 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
 @NgModule({
   declarations: [
     IndexComponent,
-    ChatThreadComponent,
   ],
   imports: [
     CommonModule,
@@ -26,7 +25,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormsModule,
     NgbModule,
     ReactiveFormsModule,
-    PerfectScrollbarModule
+    PerfectScrollbarModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: true })
   ],
   providers: [
     {
